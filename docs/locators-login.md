@@ -8,3 +8,6 @@ URL: https://zincbank.cydeo.io/login
 | Password field | `page.locator('input[type="password"]')` | accessible name "Password"; not confirmed whether this comes from a real `<label>` or an `aria-label` |
 | Sign in button | `page.getByRole('button', { name: 'Sign in' })` | type="submit" |
 | Open an account link | `page.getByRole('link', { name: 'Open an account' })` | href="/apply" |
+Element/State	Playwright Locator	Notes
+Post-login success	page.url() → contains /dashboard	Confirmed by manual sign-in
+Invalid-credentials error	page.getByText('Invalid email or password.')	Confirmed by manual sign-in; stays on /login

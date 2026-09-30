@@ -10,7 +10,7 @@ Cross-checks `features/login.feature` against `docs/rtm-login.md` in both direct
 
 ## Output
 - Updates `docs/rtm-login.md`: fills in the `Test Case(s)` column with the name of the scenario covering each row, and changes `Coverage Status` from "Pending" to one of three states — `Covered` (a tagged scenario exists and its steps plausibly satisfy the requirement), `Gap` (no scenario carries that tag at all), or `Mismatch` (a scenario carries the tag, but its steps don't appear to actually satisfy what the requirement describes — flagged for a person to look at, not silently passed).
-- Writes a separate `docs/verification-report.md` listing anything not clean: gaps, mismatches, and orphan tags (a `@REQ-LOGIN-XX` on a scenario with no matching RTM row). This is so a person can scan one short file for problems instead of diffing the whole RTM to notice a status quietly flipped to `Gap`.
+- Writes a separate `docs/verification-report-login.md` listing anything not clean: gaps, mismatches, and orphan tags (a `@REQ-LOGIN-XX` on a scenario with no matching RTM row). This is so a person can scan one short file for problems instead of diffing the whole RTM to notice a status quietly flipped to `Gap`.
 - Does not modify `features/login.feature` or `features/login-suggested.feature` — this agent verifies and records, it doesn't rewrite scenarios. Fixing a gap or mismatch is a decision for a person (or a future agent) to make, not something this one does on its own.
 
 ## Why these choices
@@ -22,6 +22,6 @@ Checking in both directions matters because a tag mismatch can fail silently in 
 
 Verifying that the suggested-scenarios file stays untagged is what actually enforces the separation designed into the Writer, rather than just trusting it holds. If a suggested scenario ever picked up a real tag, it would start silently counting as RTM-backed coverage with no one deciding that on purpose — the exact blurring the split file was built to prevent.
 
-The verification report is a separate file rather than just relying on the updated RTM because a person shouldn't have to notice a quiet status change buried in a table to find out something's wrong — a short, dedicated list of open problems is easier to actually check before trusting the pipeline moved forward.
+The verification report is a separate file rather than just relying on the updated RTM because a person shouldn't have to notice a quiet status change buried in a table to find out something's wrong — a short, dedicated list of open problems is easier to actually check before trusting the pipeline moved forward. It carries a `-<feature>` suffix, matching the RTM and the feature file it verifies, so multiple features' reports can coexist without overwriting each other.
 
 This agent doesn't edit the `.feature` files themselves, keeping the same narrow-scope instinct as the rest of the pipeline: its job is to check and report, not to fix. A "verifier" that can also silently rewrite the thing it's verifying isn't really independent anymore.
